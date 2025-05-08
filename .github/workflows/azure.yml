@@ -3,7 +3,7 @@ name: Azure Node.js + React App Deploy
 on:
   push:
     branches:
-      - main  # or your active branch
+      - main  # Change to your branch name if needed
 
 jobs:
   build-and-deploy:
@@ -40,9 +40,17 @@ jobs:
         cd server
         zip -r ../app.zip .
 
+    # Add Azure login action here
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        # The Azure service principal credentials need to be added here.
+        # You will need to create a Service Principal in Azure and set up these secrets.
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: InstagramApp
+        app-name:   InstagramApp # Replace with your Azure App Service name
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ./app.zip
